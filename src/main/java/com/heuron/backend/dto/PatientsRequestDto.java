@@ -4,12 +4,11 @@ import com.heuron.backend.patient.domain.Patients;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
-public class PatientsSaveDto {
+public class PatientsRequestDto {
     private String name;
     private int age;
     private String gender;
@@ -17,7 +16,7 @@ public class PatientsSaveDto {
     private String imgPath;
 
     @Builder
-    public PatientsSaveDto(String name, int age, String gender, String diseaseFlag, String imgPath, Timestamp createDate) {
+    public PatientsRequestDto(String name, int age, String gender, String diseaseFlag, String imgPath) {
         this.name = name;
         this.age = age;
         this.gender = gender;
