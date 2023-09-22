@@ -3,6 +3,7 @@ package com.heuron.backend.service;
 import com.heuron.backend.dto.PatientsRequestDto;
 import com.heuron.backend.patient.domain.Patients;
 import com.heuron.backend.patient.domain.PatientsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,9 +20,14 @@ import java.time.LocalDateTime;
 @Service
 public class PatientsService {
 
-    @Value("${upload.directory}")
+    @Value("${image.upload.directory}")
     private String uploadDirectory;
+
     private PatientsRepository patientsRepository;
+    @Autowired
+    public void setPatientsRepository(PatientsRepository patientsRepository) {
+        this.patientsRepository = patientsRepository;
+    }
 
     public Long savePatients(PatientsRequestDto patientsRequestDto){
 
