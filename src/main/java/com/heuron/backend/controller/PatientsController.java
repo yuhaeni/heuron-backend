@@ -26,8 +26,8 @@ public class PatientsController {
     public PatientsController() {
     }
 
-    @PostMapping(value = "/patients")
-    public ResponseEntity<?> savePatient(@RequestBody PatientsRequestDto patientsRequestDto, @RequestPart("imageFile") MultipartFile imgFile, HttpServletResponse resp, HttpServletRequest req){
+    @PostMapping(value = "/patients" ,consumes = {"multipart/form-data"})
+    public ResponseEntity<?> savePatient(@RequestPart("json") PatientsRequestDto patientsRequestDto, @RequestPart("imageFile") MultipartFile imgFile, HttpServletResponse resp, HttpServletRequest req){
 
         Map<String, Object> result = new HashMap<>();
         Long id = patientsService.savePatients(patientsRequestDto);
