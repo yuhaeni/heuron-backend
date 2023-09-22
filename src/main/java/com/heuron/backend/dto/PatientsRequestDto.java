@@ -13,15 +13,15 @@ public class PatientsRequestDto {
     private int age;
     private String gender;
     private String diseaseFlag;
-    private String imgPath;
+    //private String imgPath;
 
     @Builder
-    public PatientsRequestDto(String name, int age, String gender, String diseaseFlag, String imgPath) {
+    public PatientsRequestDto(String name, int age, String gender, String diseaseFlag) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.diseaseFlag = diseaseFlag;
-        this.imgPath = imgPath;
+        //this.imgPath = imgPath;
     }
 
     public Patients toEntity() {
@@ -30,7 +30,7 @@ public class PatientsRequestDto {
                 .age(age)
                 .gender(gender)
                 .diseaseFlag(diseaseFlag)
-                .imgPath(imgPath)
+                //.imgPath(imgPath)
                 .build();
     }
 }

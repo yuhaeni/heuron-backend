@@ -37,7 +37,7 @@ class HeuronBackendApplicationTests {
     @Test
     void savePatients() throws Exception {
 
-        PatientsRequestDto dto = new PatientsRequestDto("김옥순", 38, "W", "Y" ,"");
+        PatientsRequestDto dto = new PatientsRequestDto("김옥순", 38, "W", "Y");
         Long id = patientsService.savePatients(dto);
         log.info("id:{}",id);
 
