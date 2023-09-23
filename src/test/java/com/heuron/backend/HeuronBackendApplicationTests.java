@@ -1,6 +1,8 @@
 package com.heuron.backend;
 
+import com.heuron.backend.patient.domain.Patients;
 import com.heuron.backend.patient.dto.PatientsCreateDto;
+import com.heuron.backend.patient.dto.PatientsGetRequestDto;
 import com.heuron.backend.patient.service.PatientsService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -38,6 +40,15 @@ class HeuronBackendApplicationTests {
         PatientsCreateDto dto = new PatientsCreateDto("김옥순",38,"W","Y");
         Long id = patientsService.savePatients(dto);
         log.info("id:{}",id);
+
+    }
+
+    @Test
+    void getPatientsDetail() throws Exception {
+
+        PatientsGetRequestDto dto = new PatientsGetRequestDto(1L);
+        Patients patients = patientsService.getPatientsDetail(dto);
+        log.info("name:{}",patients.getName());
 
     }
 
