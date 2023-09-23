@@ -4,6 +4,8 @@ import com.heuron.backend.exception.ExceptionSupplier;
 import com.heuron.backend.patient.dto.PatientsCreateDto;
 import com.heuron.backend.patient.domain.Patients;
 import com.heuron.backend.patient.domain.PatientsRepository;
+import com.heuron.backend.patient.dto.PatientsDto;
+import com.heuron.backend.patient.dto.PatientsGetRequestDto;
 import com.heuron.backend.patient.dto.PatientsUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,7 +63,6 @@ public class PatientsService {
 
         try {
 
-
             File dest = new File(filePath);
 
             // 디렉토리가 없으면 생성
@@ -71,11 +72,8 @@ public class PatientsService {
 
             imgFile.transferTo(dest);
 
-
         } catch (IOException e) {
-            //TODO error 핸들링 필요
-            e.getStackTrace();
-            throw new RuntimeException(e);
+            new RuntimeException("파일 업로드 중 오류가 발생했습니다.");
         }
 
         return filePath;
@@ -89,9 +87,15 @@ public class PatientsService {
         // patientsRepository.save(patients); // Transactional 어노테이션을 붙여주면 Dirty Checking을 하게 되고, 데이터베이스에 commit을 해서 수정된 사항을 save 없이도 반영할 수 있도록 한다.
     }
 
-    @Transactional
-    public void deletePatients(PatientsUpdateDto patientsUpdateDto) {
-        Patients patients = findById(patientsUpdateDto.getId());
+    public Patients getPatientsDetail(PatientsGetRequestDto patientsGetRequestDto){
+
+        Patients patients = findById(patientsGetRequestDto.getId());
+
+        if(patients.getImgPath().isEmpty()) { // 저장 1단계 시점에는 조회 불가
+            new RuntimeException("조회 가능한 데이터가 없습니다.");
+        }
+
+        return patients;
     }
 
 }
