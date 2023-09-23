@@ -23,16 +23,10 @@ public class PatientsController {
 
     public static final Logger log = LoggerFactory.getLogger(PatientsController.class);
 
-    @Value("${image.upload.directory}")
-    private String imageUploadDirectory;
 
     private final PatientsService patientsService;
     private final static String DEFAULT_ERR_MSG = "no errors";
 
-    @GetMapping(value = "/test")
-    public String test(){
-      return "test!";
-    }
 
     @PostMapping(value = "/patients" ,consumes = {"multipart/form-data"})
     public ResponseEntity<?> savePatient(@RequestPart("json") PatientsCreateDto patientsCreateDto, @RequestPart("imageFile") MultipartFile imgFile, HttpServletRequest req){

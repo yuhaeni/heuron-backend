@@ -10,8 +10,4 @@ import javax.transaction.Transactional;
 @Transactional
 public interface PatientsRepository extends JpaRepository<Patients ,Long> {
 
-    @Modifying
-    @Query("UPDATE Patients p SET p.imgPath = :imgPath WHERE p.id = :id")
-    void updatePatientImgUrl(@Param("id") Long patientId, @Param("imgPath") String imgPath);
-
 }
