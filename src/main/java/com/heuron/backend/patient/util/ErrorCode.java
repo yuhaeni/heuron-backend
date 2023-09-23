@@ -1,4 +1,4 @@
-package com.heuron.backend.patient.domain;
+package com.heuron.backend.patient.util;
 
 import lombok.Getter;
 
