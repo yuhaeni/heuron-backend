@@ -49,4 +49,9 @@ public class Patients {
         this.diseaseFlag = diseaseFlag;
         this.imgPath = imgPath;
     }
+
+    public void updateImagePath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
 }
