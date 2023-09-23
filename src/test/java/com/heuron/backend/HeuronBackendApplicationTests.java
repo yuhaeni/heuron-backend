@@ -1,9 +1,7 @@
 package com.heuron.backend;
 
-import com.heuron.backend.dto.PatientsRequestDto;
-import com.heuron.backend.service.PatientsService;
-import javafx.application.Application;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
+import com.heuron.backend.patient.dto.PatientsCreateDto;
+import com.heuron.backend.patient.service.PatientsService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +35,7 @@ class HeuronBackendApplicationTests {
     @Test
     void savePatients() throws Exception {
 
-        PatientsRequestDto dto = new PatientsRequestDto("김옥순", 38, "W", "Y");
+        PatientsCreateDto dto = new PatientsCreateDto("김옥순",38,"W","Y");
         Long id = patientsService.savePatients(dto);
         log.info("id:{}",id);
 
