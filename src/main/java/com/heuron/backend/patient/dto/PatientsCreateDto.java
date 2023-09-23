@@ -1,27 +1,23 @@
-package com.heuron.backend.dto;
+package com.heuron.backend.patient.dto;
 
 import com.heuron.backend.patient.domain.Patients;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
-@NoArgsConstructor
-public class PatientsRequestDto {
+@Builder
+public class PatientsCreateDto {
     private String name;
     private int age;
     private String gender;
     private String diseaseFlag;
-    //private String imgPath;
 
-    @Builder
-    public PatientsRequestDto(String name, int age, String gender, String diseaseFlag) {
+    public PatientsCreateDto(String name, int age, String gender, String diseaseFlag) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.diseaseFlag = diseaseFlag;
-        //this.imgPath = imgPath;
     }
 
     public Patients toEntity() {
@@ -30,7 +26,6 @@ public class PatientsRequestDto {
                 .age(age)
                 .gender(gender)
                 .diseaseFlag(diseaseFlag)
-                //.imgPath(imgPath)
                 .build();
     }
 }
