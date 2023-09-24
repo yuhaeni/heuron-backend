@@ -1,8 +1,7 @@
 package com.heuron.backend;
 
-import com.heuron.backend.patient.domain.Patients;
 import com.heuron.backend.patient.dto.PatientsCreateDto;
-import com.heuron.backend.patient.dto.PatientsDto;
+import com.heuron.backend.patient.dto.PatientsResponseDto;
 import com.heuron.backend.patient.dto.PatientsGetRequestDto;
 import com.heuron.backend.patient.service.PatientsService;
 import org.junit.jupiter.api.Test;
@@ -12,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 import org.springframework.mock.web.MockMultipartFile;
@@ -28,50 +30,27 @@ class HeuronBackendApplicationTests {
 
     public static final Logger log = LoggerFactory.getLogger(HeuronBackendApplicationTests.class);
 
-
-    @Autowired
-    private MockMvc mockMvc;
-
     @Autowired
     PatientsService patientsService;
 
     @Test
-    void savePatients() throws Exception {
-
-        PatientsCreateDto dto = new PatientsCreateDto("김옥순",38,"W","Y");
-        Long id = patientsService.savePatients(dto);
-        log.info("id:{}",id);
-
+    void savePatient() throws Exception {
+        PatientsCreateDto dto = PatientsCreateDto.builder().name("유해니").age(26).diseaseFlag("N").gender("W").build();
+        Long id = patientsService.savePatient(dto);
+        // 결과 검증
+        assertNotNull(id); // id 값이 null이 아닌지 확인
     }
 
     @Test
-    void getPatientsDetail() throws Exception {
-
-        PatientsGetRequestDto requestDto = new PatientsGetRequestDto(1L);
-        PatientsDto patientsDto = patientsService.getPatientsDetail(requestDto);
-        log.info("name:{}",patientsDto.getName());
-
+    void getPatientDetail() throws Exception {
+        ResponseEntity<?> responseEntity = patientsService.getPatient(70L);
+        assertTrue(responseEntity.getStatusCode().is2xxSuccessful()); // HTTP 상태 코드가 2xx(성공)인지 확인
     }
 
     @Test
-    void savePatientsAll() throws Exception {
-
-        String jsonStr = "{\"name\": \"김옥순\", \"age\": \"38\", \"gender\": \"W\", \"diseaseFlag\": \"Y\"}";
-        MockMultipartFile imageFile = new MockMultipartFile("image", "image.jpg", "image/jpeg", "image-content".getBytes());
-
-        try {
-            ResultActions result = mockMvc.perform(
-                            MockMvcRequestBuilders.multipart("/heuron/v1/patients")
-                                    .file(imageFile) // 이미지 파일 포함
-                                    .param("patientInfo", jsonStr)  // JSON 문자열 포함
-                                    .contentType(MediaType.MULTIPART_FORM_DATA)
-                    )
-                    .andDo(print());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+    void deletePatient() throws Exception {
+        ResponseEntity<?> responseEntity = patientsService.deletePatient(61L);
+        assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
     }
 
 }
