@@ -1,69 +1,52 @@
 package com.heuron.backend.patient.controller;
 
 import com.heuron.backend.patient.dto.PatientsCreateDto;
-import com.heuron.backend.patient.dto.PatientsUpdateDto;
+import com.heuron.backend.patient.dto.PatientsResponseDto;
 import com.heuron.backend.patient.service.PatientsService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/heuron/v1")
+@RequestMapping(value = "/heuron/v1/patients")
 public class PatientsController {
-
-    public static final Logger log = LoggerFactory.getLogger(PatientsController.class);
-
 
     private final PatientsService patientsService;
     private final static String DEFAULT_ERR_MSG = "no errors";
 
+    @Value("${image.upload.directory}")
+    private String uploadDir;
 
-    @PostMapping(value = "/patients" ,consumes = {"multipart/form-data"})
-    public ResponseEntity<?> savePatient(@RequestPart("json") PatientsCreateDto patientsCreateDto, @RequestPart("imageFile") MultipartFile imgFile, HttpServletRequest req){
+    /* 저장 API */
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<?> createPatient(@RequestPart("data") @Valid PatientsCreateDto patientsCreateDto, @RequestPart("img") MultipartFile imgFile) {
+        return patientsService.createPatient(patientsCreateDto ,imgFile);
+    }
 
-        log.info("PatientsRequestDto:{} ,imageFile:{} ", patientsCreateDto,imgFile);
-
-        Map<String, Object> result = new HashMap<>();
-
-        Long id = patientsService.savePatients(patientsCreateDto);
-        String imgPath = "";
-
-        try {
-            if(null != id) imgPath = patientsService.uploadImage(id, imgFile);
-        } catch (Exception e) {
-            result.put("result", false);
-            result.put("msg", "이미지 업로드 실패");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
-
-        PatientsUpdateDto patientsUpdateDto = PatientsUpdateDto.builder()
-                .id(id).imgPath(imgPath).build();
-
-        try {
-            if(!imgPath.isEmpty()) patientsService.updatePatientImageUrl(patientsUpdateDto);
-        } catch (Exception e) {
-            result.put("result", false);
-            result.put("msg", "환자 이미지 정보 업데이트 실패");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
-
-
-        result.put("result", true);
-        result.put("msg", "");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-
+    /* 상세 조회 API */
+    @GetMapping("/{id}")
+    public ResponseEntity<PatientsResponseDto> getPatient(@PathVariable Long id) {
+        return patientsService.getPatient(id);
     }
 
 
+    /* 이미지 조회 API */
+    @GetMapping("/images/{id}")
+    public ResponseEntity getPatientImg(@PathVariable Long id)  {
+        return patientsService.getPatientImg(id);
+    }
+
+    /* 삭제 API */
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletePatient(@PathVariable Long id)  {
+        return patientsService.deletePatient(id);
+    }
 
 }
