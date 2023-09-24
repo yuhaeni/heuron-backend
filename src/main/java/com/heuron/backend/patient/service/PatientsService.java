@@ -75,11 +75,16 @@ public class PatientsService {
     private String uploadImage(Long id, MultipartFile imgFile) {
 
         if (imgFile.isEmpty()) {
-            new CustomException("Not exist image file");
+           throw new CustomException("Not exist image file");
         }
 
         String projectPath = System.getProperty("user.dir").replace("\\", "/");
         String extension = "." + FilenameUtils.getExtension(imgFile.getOriginalFilename()); // 확장자 추출
+
+        if (!extension.matches("\\.(png|jpeg|jpg)$")) {
+            throw new CustomException("Invalid file format");
+        }
+
         String imgPath = uploadDir + "/" + id + extension;  // DB에 저장할 이미지 경로
         String filePath = projectPath + "/src/main/resources" + imgPath;  // 실제 파일 저장 경로
 
@@ -95,7 +100,7 @@ public class PatientsService {
             imgFile.transferTo(dest);
 
         } catch (IOException e) {
-            new CustomException("fail upload image");
+            throw new CustomException("fail upload image");
         }
 
         return imgPath;
