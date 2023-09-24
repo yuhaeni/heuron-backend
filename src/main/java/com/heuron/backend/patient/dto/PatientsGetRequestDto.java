@@ -1,7 +1,6 @@
 package com.heuron.backend.patient.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -10,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class PatientsGetRequestDto {    // builder vs superbuilder 공부
+public class PatientsGetRequestDto {
     private Long id;
 }

@@ -10,8 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class PatientsUpdateDto {    // builder vs superbuilder 공부
+public class PatientsUpdateDto {
     private Long id;
     private String imgPath;
-
 }
