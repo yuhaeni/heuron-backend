@@ -39,7 +39,7 @@ public class PatientsService {
 
 
     public Patients findById(Long id) {
-        return patientsRepository.findById(id).orElseThrow(() -> new CustomException("Not exist data"));
+        return patientsRepository.findById(id).orElseThrow(() -> new CustomException(String.format("Not exist data : %d", id)));
     }
 
     @Transactional
@@ -68,7 +68,7 @@ public class PatientsService {
         return responseSuccessMsg("sucess, data save");
     }
 
-    private Long savePatient(PatientsCreateDto patientsCreateDto){
+    public Long savePatient(PatientsCreateDto patientsCreateDto){
         return patientsRepository.save(patientsCreateDto.toEntity()).getId();
     }
 
