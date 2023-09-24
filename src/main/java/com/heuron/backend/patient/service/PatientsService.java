@@ -80,19 +80,13 @@ public class PatientsService {
     }
 
     public PatientsDto getPatientsDetail(PatientsGetRequestDto patientsGetRequestDto){
-
         Patients patients = findById(patientsGetRequestDto.getId());
 
-        if(patients.getImgPath().isEmpty()) { // 저장 1단계 시점에는 조회 불가
+        if (patients.getImgPath().isEmpty()) {
             throw new RuntimeException("조회 가능한 데이터가 없습니다.");
         }
-        return PatientsDto.builder()
-                .name(patients.getName())
-                .age(patients.getAge())
-                .gender(patients.getGender())
-                .diseaseFlag(patients.getDiseaseFlag())
-                .imgPath(patients.getImgPath())
-                .build();
+
+        return patients.toDto();
     }
 
 }

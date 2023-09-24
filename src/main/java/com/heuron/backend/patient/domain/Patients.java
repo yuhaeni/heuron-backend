@@ -1,5 +1,6 @@
 package com.heuron.backend.patient.domain;
 
+import com.heuron.backend.patient.dto.PatientsDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,6 +53,16 @@ public class Patients {
 
     public void updateImagePath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public PatientsDto toDto() {
+        return PatientsDto.builder()
+                .name(name)
+                .age(age)
+                .gender(gender)
+                .diseaseFlag(diseaseFlag)
+                .imgPath(imgPath)
+                .build();
     }
 
 }
