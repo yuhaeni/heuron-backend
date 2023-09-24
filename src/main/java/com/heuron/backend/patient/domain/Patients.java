@@ -1,10 +1,11 @@
 package com.heuron.backend.patient.domain;
 
-import com.heuron.backend.patient.dto.PatientsDto;
+import com.heuron.backend.patient.dto.PatientsResponseDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -13,7 +14,9 @@ import java.sql.Timestamp;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "patients")
 public class Patients {
 
@@ -39,30 +42,26 @@ public class Patients {
     @Size(max = 300)
     private String imgPath;
 
-    @CreatedDate
+    @CreationTimestamp
+    @Column(name = "create_date" , updatable = false , nullable = false)
     private Timestamp createDate;
-
-    @Builder
-    public Patients(String name, int age, String gender, String diseaseFlag, String imgPath) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.diseaseFlag = diseaseFlag;
-        this.imgPath = imgPath;
-    }
 
     public void updateImagePath(String imgPath) {
         this.imgPath = imgPath;
     }
 
-    public PatientsDto toDto() {
-        return PatientsDto.builder()
+    public PatientsResponseDto toDto() {
+        return PatientsResponseDto.builder()
                 .name(name)
                 .age(age)
                 .gender(gender)
                 .diseaseFlag(diseaseFlag)
                 .imgPath(imgPath)
                 .build();
+    }
+
+    public boolean isEmptyImgPath() {
+        return this.imgPath.isEmpty();
     }
 
 }
