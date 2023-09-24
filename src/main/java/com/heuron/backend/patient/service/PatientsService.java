@@ -1,6 +1,5 @@
 package com.heuron.backend.patient.service;
 
-import com.heuron.backend.exception.ExceptionSupplier;
 import com.heuron.backend.patient.dto.PatientsCreateDto;
 import com.heuron.backend.patient.domain.Patients;
 import com.heuron.backend.patient.domain.PatientsRepository;
@@ -9,20 +8,13 @@ import com.heuron.backend.patient.dto.PatientsGetRequestDto;
 import com.heuron.backend.patient.dto.PatientsUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -48,7 +40,7 @@ public class PatientsService {
     public String uploadImage(Long id, MultipartFile imgFile) {
 
         if (imgFile.isEmpty()) {
-            new RuntimeException("파일을 선택하세요.");
+            throw new RuntimeException("파일을 선택하세요.");
         }
 
         String projectPath = System.getProperty("user.dir").replace("\\", "/");
@@ -73,7 +65,7 @@ public class PatientsService {
             imgFile.transferTo(dest);
 
         } catch (IOException e) {
-            new RuntimeException("파일 업로드 중 오류가 발생했습니다.");
+            throw  new RuntimeException("파일 업로드 중 오류가 발생했습니다.");
         }
 
         return filePath;
@@ -87,15 +79,20 @@ public class PatientsService {
         // patientsRepository.save(patients); // Transactional 어노테이션을 붙여주면 Dirty Checking을 하게 되고, 데이터베이스에 commit을 해서 수정된 사항을 save 없이도 반영할 수 있도록 한다.
     }
 
-    public Patients getPatientsDetail(PatientsGetRequestDto patientsGetRequestDto){
+    public PatientsDto getPatientsDetail(PatientsGetRequestDto patientsGetRequestDto){
 
         Patients patients = findById(patientsGetRequestDto.getId());
 
         if(patients.getImgPath().isEmpty()) { // 저장 1단계 시점에는 조회 불가
-            new RuntimeException("조회 가능한 데이터가 없습니다.");
+            throw new RuntimeException("조회 가능한 데이터가 없습니다.");
         }
-
-        return patients;
+        return PatientsDto.builder()
+                .name(patients.getName())
+                .age(patients.getAge())
+                .gender(patients.getGender())
+                .diseaseFlag(patients.getDiseaseFlag())
+                .imgPath(patients.getImgPath())
+                .build();
     }
 
 }

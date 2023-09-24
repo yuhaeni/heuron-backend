@@ -2,6 +2,7 @@ package com.heuron.backend;
 
 import com.heuron.backend.patient.domain.Patients;
 import com.heuron.backend.patient.dto.PatientsCreateDto;
+import com.heuron.backend.patient.dto.PatientsDto;
 import com.heuron.backend.patient.dto.PatientsGetRequestDto;
 import com.heuron.backend.patient.service.PatientsService;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
 import org.springframework.mock.web.MockMultipartFile;
@@ -46,9 +46,9 @@ class HeuronBackendApplicationTests {
     @Test
     void getPatientsDetail() throws Exception {
 
-        PatientsGetRequestDto dto = new PatientsGetRequestDto(1L);
-        Patients patients = patientsService.getPatientsDetail(dto);
-        log.info("name:{}",patients.getName());
+        PatientsGetRequestDto requestDto = new PatientsGetRequestDto(1L);
+        PatientsDto patientsDto = patientsService.getPatientsDetail(requestDto);
+        log.info("name:{}",patientsDto.getName());
 
     }
 
