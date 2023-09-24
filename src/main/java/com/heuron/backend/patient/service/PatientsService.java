@@ -8,12 +8,17 @@ import com.heuron.backend.patient.dto.PatientsGetRequestDto;
 import com.heuron.backend.patient.dto.PatientsUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -50,8 +55,8 @@ public class PatientsService {
         String formattedDate = currentDate.format(formatter);
 
         String saveFileName = id + "-patient-image" + imgFile.getOriginalFilename();
-        String filePath = projectPath + "/" + uploadDir +"/"+ formattedDate + "/" + saveFileName;
-
+        String filePath = projectPath + "/src/main/resources/static" + uploadDir +"/"+ formattedDate + "/" + saveFileName;  // 실제 파일 저장 경로
+        String imgPath = uploadDir + "/" + formattedDate + "/" + saveFileName;  // DB에 저장할 이미지 경로
 
         try {
 
@@ -68,7 +73,7 @@ public class PatientsService {
             throw  new RuntimeException("파일 업로드 중 오류가 발생했습니다.");
         }
 
-        return filePath;
+        return imgPath;
 
     }
 
@@ -88,5 +93,6 @@ public class PatientsService {
 
         return patients.toDto();
     }
+
 
 }
