@@ -3,7 +3,10 @@ package com.heuron.backend.patient.service;
 import com.heuron.backend.exception.CustomException;
 import com.heuron.backend.patient.domain.Patients;
 import com.heuron.backend.patient.domain.PatientsRepository;
-import com.heuron.backend.patient.dto.*;
+import com.heuron.backend.patient.dto.PatientsCreateDto;
+import com.heuron.backend.patient.dto.PatientsResponseDto;
+import com.heuron.backend.patient.dto.PatientsUpdateDto;
+import com.heuron.backend.patient.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -11,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -131,11 +131,14 @@ public class PatientsService {
     public ResponseEntity getPatientImg(Long id) {
         // domain 조회 한 값을 기준으로 서버 내부에 저장되어있는 파일 탐색, return img
 
+        
         String projectPath = System.getProperty("user.dir").replace("\\", "/");
         String basePath = projectPath + "/src/main/resources/";
         String imagePath =  findById(id).getImgPath();
-
         Path imageFilePath = Paths.get(basePath+imagePath);
+
+        String[] parts = imagePath.split("/");
+        String imageName = parts[parts.length - 1];
 
         try {
 
@@ -144,8 +147,18 @@ public class PatientsService {
 
             // 이미지 파일이 존재하면 응답으로 보냄
             if (resource.exists() && resource.isReadable()) {
+                // 이미지의 확장자에 따라 Content-Type 설정
+                String contentType = "";
+                if (imageName.endsWith(".jpg") || imageName.endsWith(".jpeg")) {
+                    contentType = MediaType.IMAGE_JPEG_VALUE;
+                } else if (imageName.endsWith(".png")) {
+                    contentType = MediaType.IMAGE_PNG_VALUE;
+                } else {
+                    return  responseFailMsg("fail, Invalid file format");
+                }
+
                 return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG) // 이미지 타입에 맞게 설정
+                        .contentType(MediaType.parseMediaType(contentType))
                         .body(resource);
             } else {
                 return  responseFailMsg("fail, Not exist image data");
