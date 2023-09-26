@@ -61,7 +61,7 @@ public class Patients {
     }
 
     public boolean isEmptyImgPath() {
-        return this.imgPath.isEmpty();
+        return this.imgPath == null || this.imgPath.isEmpty();
     }
 
 }
