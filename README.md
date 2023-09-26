@@ -25,24 +25,45 @@
 <br>
 
 4. 이미지 조회
-- 이미지 조회는 주로 Linux 환경에서 특정 디렉토리에 업로드 후 다운로드 받는 방식으로 구현해서, 프로젝트 내부에 있는 이미지 파일을 조회하기 새로운 방식이 필요했음
-- `UrlResource` 와 `Resource`를 이용하여 이미지 URL 생성함 
-
+- 웹 브라우저에 이미지 파일을 직접 보여주기 위해 `Resource` 인터페이스를 이용하여 이미지 URL 생성함 
+- 이미지 확장자에 따라 `Content-Type`을 설정함
 <br><br><br><br>
 
-* 아래는 postman으로 진행한 API 테스트 결과입니다.
+### API 정의 📖
 
-  1) 저장 API 
+1) 저장 API 
+- 요청 url
+  : [POST] http://localhost:8080/heuron/v1/patients
+- json 샘플 
+```
+{
+   data:{
+       "name": "김옥순"
+       ,"age": 38
+       ,"gender": "W"
+       ,"diseaseFlag": "Y"
+   },
+   img: 이미지파일.jpg
+}
+```
 
 ![image](https://github.com/yuhaeni/heuron-backend/assets/55648249/6965a637-ab7c-4207-943c-e73f1945e62a)
 
 2) 상세조회 API
+- 요청 url
+  : [GET] http://localhost:8080/heuron/v1/patients/{id}
 ![image](https://github.com/yuhaeni/heuron-backend/assets/55648249/f0d7671c-68c3-4cce-8d06-4c29518b199e)
 
+
 3) 이미지 조회 API
+- 요청 url
+  : [GET] http://localhost:8080/heuron/v1/patients/images/{id}
 ![image](https://github.com/yuhaeni/heuron-backend/assets/55648249/0934cd4a-7978-4814-b13e-12b2a1d8802d)
 
-4) 삭제 API 
+
+4) 삭제 API
+- 요청 url
+  : [DELETE] http://localhost:8080/heuron/v1/patients/{id}
 ![image](https://github.com/yuhaeni/heuron-backend/assets/55648249/e62b5e18-0947-4f62-be61-02471bef313f)
 
 
