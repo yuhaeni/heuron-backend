@@ -134,12 +134,19 @@ public class PatientsService {
     }
 
     public ResponseEntity getPatientImg(Long id) {
+
         // domain 조회 한 값을 기준으로 서버 내부에 저장되어있는 파일 탐색, return img
 
-        
+        Patients patients = findById(id);
+
+        if (patients.isEmptyImgPath()) {
+            return responseFailMsg("fail, select data");
+        }
+
         String projectPath = System.getProperty("user.dir").replace("\\", "/");
         String basePath = projectPath + "/src/main/resources/";
-        String imagePath =  findById(id).getImgPath();
+
+        String imagePath =patients.getImgPath();
         Path imageFilePath = Paths.get(basePath+imagePath);
 
         String[] parts = imagePath.split("/");
