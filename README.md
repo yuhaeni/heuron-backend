@@ -25,8 +25,8 @@
 <br>
 
 4. 이미지 조회
-- 웹 브라우저에 이미지 파일을 직접 보여주기 위해 `Resource` 인터페이스를 이용하여 이미지 URL 생성함 
-- 이미지 확장자에 따라 `Content-Type`을 설정함
+- 웹 브라우저에 이미지 파일을 직접 보여주기 위해 `UrlResource`를 사용하여 이미지 파일을 읽은 후, `ResponseEntity`로 포장하여 응답함
+- 이미지 파일 확장자에 따라 `Content-Type`을 설정함
 <br><br><br><br>
 
 ### API 정의 📖
